@@ -7,12 +7,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.heartbeat.apkplugins.LoadAssetActivity">
+    android:gravity="center"
+    tools:context="com.zhouyuan.plugin.MainActivity">
 
-    <Button
-        android:id="@+id/btn_activity"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="show plugin name" />
-
+        android:textSize="30dp"
+        android:text="恭喜你成功打开封印!" />
 </RelativeLayout>
