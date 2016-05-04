@@ -1,4 +1,4 @@
-package com.heartbeat.apkplugins.Utils.ZPlugin;
+package com.heartbeat.zplugin;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
