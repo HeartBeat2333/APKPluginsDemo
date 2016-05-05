@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/APKPluginsDemo.iml" filepath="$PROJECT_DIR$/APKPluginsDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myplugin/myplugin.iml" filepath="$PROJECT_DIR$/myplugin/myplugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/zplugin/zplugin.iml" filepath="$PROJECT_DIR$/zplugin/zplugin.iml" />
     </modules>
   </component>

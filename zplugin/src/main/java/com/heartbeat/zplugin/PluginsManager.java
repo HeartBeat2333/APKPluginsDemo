@@ -1,10 +1,13 @@
 package com.heartbeat.zplugin;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.File;
@@ -182,5 +185,67 @@ public class PluginsManager {
 
     public PluginHolder getPluginHolder(String packageName) {
         return mPluginHolders.get(packageName);
+    }
+
+    public void startPluginActivity(Context context, String packageName, String activityName) {
+        startPluginActivityForResult(context, packageName, activityName, -1);
+    }
+
+    public void startPluginActivityForResult(Context context, String packageName, String activityName, int requestCode) {
+        if (TextUtils.isEmpty(packageName)) {
+            throw new NullPointerException("packageName is null.");
+        }
+
+        PluginHolder holder = mPluginHolders.get(packageName);
+
+        Class<?> clazz = loadPluginClass(holder.dexClassLoader, activityName);
+        if(clazz == null) {
+            throw new NullPointerException("can not found activity.");
+        }
+
+        Class<? extends Activity> activityClass = getProxyActivityClass(clazz);
+
+        if (activityClass == null) {
+            throw new NullPointerException("can not found activityClass.");
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra(ZConstants.EXTRA_CLASS, clazz.getName());
+        intent.putExtra(ZConstants.EXTRA_PACKAGE, packageName);
+        intent.setClass(context, activityClass);
+        performStartActivityForResult(context, intent, requestCode);
+    }
+
+
+    /**
+     * 获取classloader里的class
+     * @param classLoader
+     * @param className
+     * @return
+     */
+    private Class<?> loadPluginClass(ClassLoader classLoader, String className) {
+        Class<?> clazz = null;
+        try {
+            clazz = Class.forName(className, true, classLoader);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return clazz;
+    }
+
+    private Class<? extends Activity> getProxyActivityClass(Class<?> clazz) {
+        Class<? extends Activity> activityClass = null;
+//        if (ZPluginActivity.class.isAssignableFrom(clazz)) {
+            activityClass = ZProxyActivity.class;
+//        }
+        return activityClass;
+    }
+
+    private void performStartActivityForResult(Context context, Intent intent, int requestCode) {
+        if (context instanceof Activity) {
+            ((Activity) context).startActivityForResult(intent, requestCode);
+        } else {
+            context.startActivity(intent);
+        }
     }
 }

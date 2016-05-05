@@ -25,6 +25,15 @@
         <activity
             android:name=".LoadActActivity"
             android:label="@string/title_activity_load_act"></activity>
+
+        <activity
+            android:name="com.heartbeat.zplugin.ZProxyActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.heartbeat.zplugin.activity.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

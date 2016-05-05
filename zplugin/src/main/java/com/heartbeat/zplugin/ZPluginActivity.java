@@ -1,7 +1,11 @@
 package com.heartbeat.zplugin;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * 插件被调用activity基类
@@ -53,5 +57,45 @@ public class ZPluginActivity extends Activity implements IZPlugin {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void setContentView(View view) {
+        mProxyActivity.setContentView(view);
+    }
+
+    @Override
+    public void setContentView(View view, ViewGroup.LayoutParams params) {
+        mProxyActivity.setContentView(view, params);
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+        mProxyActivity.setContentView(layoutResID);
+    }
+
+    @Override
+    public void addContentView(View view, ViewGroup.LayoutParams params) {
+        mProxyActivity.addContentView(view, params);
+    }
+
+    @Override
+    public View findViewById(int id) {
+        return mProxyActivity.findViewById(id);
+    }
+
+    @Override
+    public Intent getIntent() {
+        return mProxyActivity.getIntent();
+    }
+
+    @Override
+    public ClassLoader getClassLoader() {
+        return mProxyActivity.getClassLoader();
+    }
+
+    @Override
+    public Resources getResources() {
+        return mProxyActivity.getResources();
     }
 }

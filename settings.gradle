@@ -1,1 +1,1 @@
-include ':app', ':zplugin'
+include ':app', ':zplugin', ':myplugin'

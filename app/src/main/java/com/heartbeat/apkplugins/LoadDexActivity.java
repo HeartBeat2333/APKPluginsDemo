@@ -3,8 +3,7 @@ package com.heartbeat.apkplugins;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-
-import com.heartbeat.apkplugins.Utils.ZPlugin.PluginsManager;
+import com.heartbeat.zplugin.PluginsManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -27,11 +26,11 @@ public class LoadDexActivity extends Activity {
         PluginsManager
                 .getInstance(this).loadAssetPlugins("plugins");
         final DexClassLoader classloader = PluginsManager
-                .getInstance(this).getPluginHolder("com.zhouyuan.plugin").dexClassLoader;
+                .getInstance(this).getPluginHolder("com.heartbeat.myplugin").dexClassLoader;
 
         if(classloader != null) {
             try {
-                Class<?> classToLoad = (Class<?>) classloader.loadClass("com.zhouyuan.plugin.Registry");
+                Class<?> classToLoad = (Class<?>) classloader.loadClass("com.heartbeat.myplugin.Registry");
 
                 Field classesField = classToLoad.getDeclaredField("_classes");
 

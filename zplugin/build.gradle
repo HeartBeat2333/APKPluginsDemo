@@ -16,10 +16,25 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.3.0'
 }
+
+// 删除ZPlugin.jar任务
+task deleteOldJar(type: Delete) {
+    delete 'release/ZPlugin.jar'
+}
+
+// 导出jar包到release
+task exportJar(type: Copy) {
+    from('build/intermediates/bundles/release/')
+    into('release/')
+    include('classes.jar')
+    ///Rename the jar
+    rename('classes.jar', 'ZPlugin.jar')
+}
+
+exportJar.dependsOn(deleteOldJar, build)
