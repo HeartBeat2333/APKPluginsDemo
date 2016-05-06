@@ -18,9 +18,9 @@ public class MainTestActivity extends ZPluginActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        that.setContentView(R.layout.activity_main);
-//        initView(that);
-        that.setContentView(creatContentView(that));
+        that.setContentView(R.layout.activity_main);
+        initView(that);
+//        that.setContentView(creatContentView(that));
     }
 
     private View creatContentView(final Context context) {

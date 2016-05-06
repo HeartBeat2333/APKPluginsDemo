@@ -10,11 +10,10 @@ import android.content.res.Resources;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.heartbeat.zplugin.Utils.PluginUtil;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 
 import dalvik.system.DexClassLoader;
@@ -85,7 +84,7 @@ public class PluginsManager {
             if (desFile.exists()) {
                 desFile.delete();
             }
-            copyAssetsApkToFile(mContext, "plugins/" + file, des);
+            PluginUtil.copyAssetsApkToFile(mContext, "plugins/" + file, des);
 
             loadPlugin(des);
         }
@@ -102,86 +101,16 @@ public class PluginsManager {
             return;
         }
 
-        DexClassLoader dexClassLoader = loadDex(pluginPath);
-        AssetManager assetManager = loadAssetManager(pluginPath);
-        Resources resources = loadResources(assetManager);
+        DexClassLoader dexClassLoader = PluginUtil.loadDex(mContext, pluginPath, mDexDir.getAbsolutePath(), mNativeLibDir);
+        AssetManager assetManager = PluginUtil.loadAssetManager(pluginPath);
+        Resources resources = PluginUtil.loadResources(mContext, assetManager);
 
         PluginHolder pluginHolder = new PluginHolder(dexClassLoader, resources, packageInfo);
         mPluginHolders.put(packageInfo.packageName, pluginHolder);
     }
 
-    /**
-     * 加载dex
-     * @param pluginPath
-     * @return
-     */
-    public DexClassLoader loadDex(String pluginPath) {
-        /*
-        dexPath:被解压的apk路径，不能为空。
-        optimizedDirectory：解压后的.dex文件的存储路径，不能为空。这个路径建议使用应用程序的私有路径，不要放到sdcard上，否则代码容易被注入攻击。
-        libraryPath：os库的存放路径，可以为空，若有os库，必须填写。
-        parent：父亲加载器，一般为context.getClassLoader(),使用当前上下文的类加载器。
-         */
-        DexClassLoader classloader = new DexClassLoader(
-                pluginPath, mDexDir.getAbsolutePath(),
-                mNativeLibDir,
-                mContext.getClassLoader());
-        return classloader;
-    }
 
-    /**
-     * 加载Asset
-     * 反射调用 addAssetPath 方法加载
-     * @return
-     */
-    private AssetManager loadAssetManager(String pluginPath) {
-        try {
-            AssetManager assetManager = AssetManager.class.newInstance();
-            Method addAssetPath = assetManager.getClass().getMethod("addAssetPath", String.class);
-            addAssetPath.invoke(assetManager, pluginPath);
-            return assetManager;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
-    /**
-     * 加载Resources
-     * @param assetManager
-     * @return
-     */
-    private Resources loadResources(AssetManager assetManager) {
-        Resources superRes = mContext.getResources();
-        Resources resources = new Resources(assetManager, superRes.getDisplayMetrics(), superRes.getConfiguration());
-        return resources;
-    }
-
-    /**
-     * 将apk从asset中拷贝到SD卡
-     *
-     * @param context
-     * @param src
-     * @param des
-     */
-    public void copyAssetsApkToFile(Context context, String src, String des) {
-        try {
-            InputStream is = context.getAssets().open(src);
-            FileOutputStream fos = new FileOutputStream(new File(des));
-            byte[] buffer = new byte[1024];
-            while (true) {
-                int len = is.read(buffer);
-                if (len == -1) {
-                    break;
-                }
-                fos.write(buffer, 0, len);
-            }
-            is.close();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public PluginHolder getPluginHolder(String packageName) {
         return mPluginHolders.get(packageName);
@@ -227,8 +156,6 @@ public class PluginsManager {
         Class<?> clazz = null;
         try {
 //            clazz = Class.forName(className, true, classLoader);
-            //TODO 测试
-            Class<?> clazz2 = classLoader.loadClass("com.heartbeat.myplugin.Registry");
             clazz = classLoader.loadClass(className);
             clazz.newInstance();
         } catch (ClassNotFoundException e) {
@@ -243,9 +170,9 @@ public class PluginsManager {
 
     private Class<? extends Activity> getProxyActivityClass(Class<?> clazz) {
         Class<? extends Activity> activityClass = null;
-//        if (ZPluginActivity.class.isAssignableFrom(clazz)) {
+        if (ZPluginActivity.class.isAssignableFrom(clazz)) {
             activityClass = ZProxyActivity.class;
-//        }
+        }
         return activityClass;
     }
 
