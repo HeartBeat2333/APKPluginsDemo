@@ -1,4 +1,5 @@
 ## ZPlugin APK插件化工具
+目前还是一个简单的框架Demo, 待更新....
 
 #### 一、APK为什么要插件化化？
 1. 免安装： 无需重新安装APK，无需修改主APK源代码。
@@ -44,4 +45,7 @@
     ```java
     PluginsManager.getInstance(this).startPluginActivity(context, packageName, activityname);
     ```
-
+#### 五、未来方向：
+1. 与Rxjava结合：异步加载管理， 宿主和插件的通行, 
+2. 插件管理： 动态更新、安装、卸载，插件防注入验证， 插件版本控制, 
+3. 多组件支持，Intent启动。
