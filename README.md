@@ -17,30 +17,31 @@
 3. 防止插件apk中的资源和宿主apk中的资源引用冲突。
 
 #### 四、 如何使用ZPlugin
-1. 用Android Studio执行工具包ZPlugin的exportjar任务，将ZPlugin打包成jar， 打包后的jar将生成在zplugin\release\目录下。
-2. 插件 ： 将工具包ZPlugin放入插件libs目录下， 插件gradle 改为
+1.  用Android Studio执行工具包ZPlugin的exportjar任务，将ZPlugin打包成jar， 打包后的jar将生成在zplugin\release\目录下。
+2.  插件 ： 将工具包ZPlugin放入插件libs目录下， 插件gradle 改为
 
-```java
-dependencies {
-    // 使用provided, 插件将用ZPlugin编译，但不会打包进APK
-    provided fileTree(include: ['*.jar'], dir: 'libs')
-    provided files('libs/ZPlugin.jar')
-}
-```
+    ```java
+    dependencies {
+        // 使用provided, 插件将用ZPlugin编译，但不会打包进APK
+        provided fileTree(include: ['*.jar'], dir: 'libs')
+        provided files('libs/ZPlugin.jar')
+    }
+    ```
+
 3. 宿主APK : 依赖ZPlugin， 
 
-加载插件：
-```java
-PluginsManager.getInstance(this).loadAssetPlugins("plugins");
-```
-
-通过插件包名获取插件资源：
-```java
-PluginsManager.getInstance(this).getPluginHolder("com.heartbeat.myplugin").dexClassLoader;
-```
-
-启动插件Activity:
-```java
-PluginsManager.getInstance(this).startPluginActivity(context, packageName, activityname);
-```
+    加载插件：
+    ```java
+    PluginsManager.getInstance(this).loadAssetPlugins("plugins");
+    ```
+    
+    通过插件包名获取插件资源：
+    ```java
+    PluginsManager.getInstance(this).getPluginHolder("com.heartbeat.myplugin").dexClassLoader;
+    ```
+    
+    启动插件Activity:
+    ```java
+    PluginsManager.getInstance(this).startPluginActivity(context, packageName, activityname);
+    ```
 
