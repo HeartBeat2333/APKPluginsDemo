@@ -34,6 +34,8 @@
     加载插件：
     ```java
     PluginsManager.getInstance(this).loadAssetPlugins("plugins");
+    // 或者
+    PluginsManager.getInstance(this).loadPlugin("sdcard/plugin-path/plugin.apk");
     ```
     
     通过插件包名获取插件资源：
