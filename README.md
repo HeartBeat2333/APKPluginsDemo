@@ -48,6 +48,7 @@
     PluginsManager.getInstance(this).startPluginActivity(context, packageName, activityname);
     ```
 #### 五、未来方向：
+
     1. 与Rxjava结合：异步加载管理， 宿主和插件的通行, 
     2. 插件管理： 动态更新、安装、卸载，插件防注入验证， 插件版本控制, 
     3. 多组件支持，Intent启动。
