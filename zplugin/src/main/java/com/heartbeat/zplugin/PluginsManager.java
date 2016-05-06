@@ -23,7 +23,7 @@ import dalvik.system.DexClassLoader;
  * 插件加载管理类
  * 默认APK插件在Asset的plugins目录下
  * <p/>
- * TODO : 异步加载管理, KEY管理
+ * TODO : 异步加载管理, KEY管理, Intent启动，与Rxjava结合，插件和宿主之间的通信
  * Created by zhouyuan on 2016/5/3.
  */
 public class PluginsManager {
@@ -125,7 +125,7 @@ public class PluginsManager {
         DexClassLoader classloader = new DexClassLoader(
                 pluginPath, mDexDir.getAbsolutePath(),
                 mNativeLibDir,
-                ClassLoader.getSystemClassLoader());
+                mContext.getClassLoader());
         return classloader;
     }
 
@@ -226,8 +226,16 @@ public class PluginsManager {
     private Class<?> loadPluginClass(ClassLoader classLoader, String className) {
         Class<?> clazz = null;
         try {
-            clazz = Class.forName(className, true, classLoader);
+//            clazz = Class.forName(className, true, classLoader);
+            //TODO 测试
+            Class<?> clazz2 = classLoader.loadClass("com.heartbeat.myplugin.Registry");
+            clazz = classLoader.loadClass(className);
+            clazz.newInstance();
         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         return clazz;

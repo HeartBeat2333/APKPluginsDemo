@@ -40,7 +40,7 @@ public class MainTestActivity extends ZPluginActivity {
         });
 
         TextView textView = new TextView(context);
-        textView.setText("Hello, I'm Plugin B.");
+        textView.setText("我是一个萌萌的插件");
         textView.setTextSize(30);
         layout.addView(textView, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);

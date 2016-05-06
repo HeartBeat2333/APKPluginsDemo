@@ -10,6 +10,11 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.WindowManager;
 
 import java.lang.reflect.Constructor;
 
@@ -99,8 +104,10 @@ public class ZProxyActivity extends Activity {
             Object instance = localConstructor.newInstance(new Object[] {});
             mPluginActivity = (IZPlugin) instance;
             Log.d(TAG, "instance = " + instance);
+            mPluginActivity.attach(this, mPluginHolder);
 
             Bundle bundle = new Bundle();
+            bundle.putInt(ZConstants.FROM, ZConstants.FROM_EXTERNAL);
             mPluginActivity.onCreate(bundle);
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,4 +129,101 @@ public class ZProxyActivity extends Activity {
     public Resources.Theme getTheme() {
         return mTheme == null ? super.getTheme() : mTheme;
     }
+
+    @Override
+    protected void onStart() {
+        mPluginActivity.onStart();
+        super.onStart();
+    }
+
+    @Override
+    protected void onRestart() {
+        mPluginActivity.onRestart();
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        mPluginActivity.onResume();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        mPluginActivity.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        mPluginActivity.onStop();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mPluginActivity.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        mPluginActivity.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        mPluginActivity.onRestoreInstanceState(savedInstanceState);
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        mPluginActivity.onNewIntent(intent);
+        super.onNewIntent(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        mPluginActivity.onBackPressed();
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+        return mPluginActivity.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        super.onKeyUp(keyCode, event);
+        return mPluginActivity.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public void onWindowAttributesChanged(WindowManager.LayoutParams params) {
+        mPluginActivity.onWindowAttributesChanged(params);
+        super.onWindowAttributesChanged(params);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        mPluginActivity.onWindowFocusChanged(hasFocus);
+        super.onWindowFocusChanged(hasFocus);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        mPluginActivity.onCreateOptionsMenu(menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        mPluginActivity.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
+    }
+
 }
